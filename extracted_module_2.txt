@@ -1,0 +1,285 @@
+CYBERSAARTHI — MODULE 2
+
+Investigation Workspace, Graph UI, Timeline, Analytics & Grounded AI Assistant
+
+CyberSaarthi Prototype | Parallel Development Specification | v1.0
+
+1. Module Responsibility
+
+Module 2 owns the investigator-facing experience. It consumes Module 1's stable APIs and must not depend on its database implementation.
+
+The supplied concept describes the investigation workspace as Graph + Timeline + Evidence + AI, with the graph as the central investigative canvas. fileciteturn0file0L480-L508
+
+Investigator dashboard.
+
+Case browser and case overview.
+
+Document/extraction review screens.
+
+Entity match review.
+
+Interactive investigation graph.
+
+Progressive star-topology expansion.
+
+Entity profile and evidence panel.
+
+Timeline.
+
+Pattern/lead panel.
+
+Network analytics panel.
+
+Grounded AI Investigation Assistant.
+
+2. Recommended Stack
+
+React + TypeScript + Vite
+
+Tailwind CSS or component library
+
+Cytoscape.js or React Flow for graph UI
+
+REST client for Module 1 APIs
+
+Optional WebSocket/SSE for processing status
+
+3. UI Routes
+
+/login
+
+/dashboard
+
+/cases
+
+/cases/:id
+
+/cases/:id/upload
+
+/cases/:id/extraction
+
+/cases/:id/matches
+
+/cases/:id/investigation
+
+/entities/:id
+
+/evidence/:id
+
+4. Investigation Workspace Layout
+
+Use a three-area layout: navigation/sidebar, central graph canvas, contextual right panel. The right panel changes based on the selected case, node, edge, evidence item, pattern, or timeline event.
+
+5. Graph Interaction Contract
+
+Open case → show the case as root.
+
+Render direct relationships as a star topology.
+
+Click a node → request one-hop expansion.
+
+Expand again only when the investigator asks.
+
+Click edge → show relationship type, confidence, evidence and dates.
+
+Click node → show entity profile and linked cases.
+
+Filter by entity type, relationship, date, case and confidence.
+
+Provide Reset to Case.
+
+Set a maximum node count per expansion request.
+
+6. Star Topology
+
+PHONE                      |                      |LOCATION -------- CASE/FIR -------- PERSON                      |                      |                  VEHICLE                      |                 ORGANIZATIONSelected node becomes the center when the investigator changes focus.
+
+7. Extraction Review UI
+
+Show original document/page text beside extracted candidates.
+
+Group candidates by entity type.
+
+Each candidate has Approve, Edit and Reject actions.
+
+Display confidence and source page/chunk.
+
+Do not visually imply that an unapproved extraction is a verified fact.
+
+8. Entity Match Review
+
+Show source entity and candidate entity side by side.
+
+Show shared identifiers and similarity reasons.
+
+Display confidence as a suggestion, not a proof.
+
+Buttons: Confirm Match / Reject Match.
+
+After confirmation, refresh graph data.
+
+9. Timeline
+
+Chronological event cards.
+
+Filter by date range, entity and event type.
+
+Selecting an event highlights related graph nodes.
+
+Every event links to evidence.
+
+10. Pattern Detection UI
+
+Pattern alerts are investigative leads requiring verification. The supplied concept gives examples such as shared phone numbers, shared bank accounts, frequent locations, dense communication clusters and rapid fund movement. fileciteturn0file0L512-L539
+
+Shared Identifier
+
+Frequent Location
+
+Dense Communication Cluster
+
+Transaction Burst
+
+Cross-Case Reuse
+
+Potential Connector
+
+11. Network Analytics UI
+
+Use labels such as High Connectivity or Potential Connector. Do not display a graph metric as a statement that a person is criminal.
+
+Degree centrality
+
+Betweenness centrality
+
+Community membership
+
+Case participation count
+
+Connected identifiers
+
+12. Grounded AI Assistant
+
+Answer only from authorized data returned by Module 1.
+
+Retrieve graph paths/entities for relationship questions.
+
+Retrieve evidence chunks for textual questions.
+
+Show source case/document/evidence references.
+
+If evidence is insufficient, say so instead of inventing an answer.
+
+Provide Show Relationship / Show Evidence actions.
+
+13. AI Query Flow
+
+User asks question.
+
+Classify query.
+
+Call Module 1 graph/entity/timeline APIs.
+
+Call evidence retrieval endpoint or relevant case/evidence APIs.
+
+Build bounded context.
+
+Send context to LLM.
+
+Render answer with evidence references.
+
+Allow investigator to jump to graph/evidence.
+
+14. Module 2 API Consumption
+
+UI feature
+
+Module 1 API
+
+Case list
+
+GET /api/v1/cases
+
+Case details
+
+GET /api/v1/cases/{id}
+
+Processing status
+
+GET /api/v1/documents/{id}/status
+
+Extraction review
+
+GET/POST extraction endpoints
+
+Match review
+
+GET/POST entity-match endpoints
+
+Graph
+
+GET /cases/{id}/graph + POST /graph/expand
+
+Timeline
+
+GET /cases/{id}/timeline
+
+Patterns
+
+GET /cases/{id}/patterns
+
+Analytics
+
+GET /cases/{id}/analytics
+
+Entity profile
+
+GET /entities/{id}
+
+15. Frontend State
+
+currentUser
+
+selectedCase
+
+selectedNode
+
+selectedEdge
+
+graphNodes / graphEdges
+
+expandedNodeIds
+
+timelineFilters
+
+graphFilters
+
+extractionReviewState
+
+matchReviewState
+
+assistantMessages
+
+processingStatus
+
+16. Module 2 Done Criteria
+
+Investigator can browse cases.
+
+Case graph opens in star topology.
+
+Graph expands one level at a time.
+
+Entity and relationship evidence is visible.
+
+Extraction and match review workflows work.
+
+Timeline and patterns are visible.
+
+Analytics identify high-connectivity entities.
+
+AI assistant answers at least one graph/evidence question with references.
+
+UI handles loading, empty, error and unauthorized states.
+
+Module can run against a mocked Module 1 API and later switch to the real API without code restructuring.

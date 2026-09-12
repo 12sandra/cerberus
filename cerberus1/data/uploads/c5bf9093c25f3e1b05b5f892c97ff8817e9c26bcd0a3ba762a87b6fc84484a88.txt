@@ -1,0 +1,15 @@
+
+FIRST INFORMATION REPORT (FIR No: 002/2026)
+Police Station: Cyber Crime Police Station Kochi
+Date & Time of Occurrence: 22-02-2026 16:45 hrs
+Complainant: Anand Menon, residing at Kadavanthra, Ernakulam.
+
+Details of Incident:
+Instant loan app extortion scam. Complainant harassed with abusive calls and morphing threats after downloading FastLoan app.
+Accused Person: R. Kumar
+Associated Mobile: 9876543210
+Email: rahul.k@example.com
+UPI Identifier: rahul@oksbi
+Location: Ernakulam, Kerala.
+
+Investigation officer notes: The calls originated from SIM card registered to phone number 9876543210.

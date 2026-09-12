@@ -1,0 +1,305 @@
+CYBERSAARTHI — MODULE 1
+
+Data Intelligence, Ingestion, AI Extraction, Entity Resolution & Graph Backend
+
+CyberSaarthi Prototype | Parallel Development Specification | v1.0
+
+1. Module Responsibility
+
+Module 1 owns the data and intelligence pipeline. Its job is to turn FIRs/reports into trusted, traceable structured data and expose that data to Module 2.
+
+The supplied concept defines the pipeline as document ingestion → OCR/parsing → AI/NLP extraction → entity resolution → PostgreSQL/Neo4j → graph analytics. fileciteturn0file0L574-L610
+
+Authentication and authorization foundation.
+
+Case/FIR CRUD.
+
+Document upload and immutable storage.
+
+OCR/PDF text extraction.
+
+AI/NLP entity and event extraction.
+
+Extraction review state management.
+
+Entity normalization and matching.
+
+PostgreSQL system of record.
+
+Neo4j relationship graph.
+
+Graph query/expansion APIs.
+
+Pattern detection and network analytics APIs.
+
+Audit logging and provenance.
+
+2. Recommended Stack
+
+Python + FastAPI
+
+PostgreSQL
+
+Neo4j
+
+Redis + background worker
+
+S3-compatible storage / MinIO
+
+Pluggable OCR adapter
+
+Pluggable LLM/NLP adapter
+
+Docker Compose
+
+3. Database Ownership
+
+users, stations, cases, documents, document_chunks
+
+extractions, entities, case_entities, entity_matches
+
+events, evidence, audit_logs, investigation_notes
+
+4. Processing Workflow
+
+Create/select case.
+
+Upload FIR/report.
+
+Store original file and SHA-256 hash.
+
+Extract text directly or through OCR.
+
+Split text into page/chunk evidence.
+
+Run structured entity/event extraction.
+
+Validate the extraction schema.
+
+Return candidates for investigator review.
+
+Normalize approved entities.
+
+Generate entity-match candidates.
+
+Persist confirmed entities/relationships.
+
+Synchronize approved facts to Neo4j.
+
+Expose graph, timeline, patterns and analytics APIs.
+
+5. AI Extraction Contract
+
+{  "case": {"crime_category": "FINANCIAL_CRIME"},  "persons": [{"name": "Rahul Kumar", "role": "ACCUSED"}],  "phones": [{"value": "9876543210"}],  "vehicles": [{"registration": "KL07AB1234"}],  "locations": [{"name": "Kochi"}],  "organizations": [{"name": "ABC Trading"}],  "events": [],  "relationships": []}
+
+6. Entity Resolution
+
+Use exact normalized identifiers first, then conservative candidate scoring. Probabilistic identity matches must remain suggestions until an investigator confirms them.
+
+The supplied concept explicitly describes a possible match such as Rahul Kumar / R. Kumar sharing a phone number and requiring Confirm Match / Reject Match review. fileciteturn0file0L434-L476
+
+Normalize identifiers.
+
+Find exact matches.
+
+Generate fuzzy/name candidates.
+
+Calculate score and reasons.
+
+Store SUGGESTED match.
+
+Expose candidate to Module 2 UI.
+
+Accept/reject decision returns to Module 1.
+
+Only confirmed matches modify trusted relationships.
+
+7. Neo4j Model
+
+Node
+
+Important properties
+
+Case
+
+id, fir_number, category, station_id
+
+Person
+
+id, canonical_name, aliases
+
+Phone
+
+id, normalized_value
+
+Vehicle
+
+id, registration
+
+Location
+
+id, normalized_name, coordinates
+
+Organization
+
+id, canonical_name
+
+BankAccount
+
+id, masked_identifier
+
+UPI
+
+id, normalized_value
+
+Email
+
+id, normalized_value
+
+Event
+
+id, event_type, occurred_at
+
+8. Required APIs
+
+Method
+
+Endpoint
+
+Purpose
+
+POST
+
+/api/v1/cases
+
+Create case
+
+GET
+
+/api/v1/cases
+
+List/search cases
+
+GET
+
+/api/v1/cases/{id}
+
+Case details
+
+POST
+
+/api/v1/cases/{id}/documents
+
+Upload document
+
+GET
+
+/api/v1/documents/{id}/status
+
+Processing status
+
+GET
+
+/api/v1/documents/{id}/extraction
+
+Extraction candidates
+
+POST
+
+/api/v1/extractions/{id}/review
+
+Approve/edit/reject
+
+GET
+
+/api/v1/entities/search
+
+Entity search
+
+GET
+
+/api/v1/entities/{id}
+
+Entity profile
+
+GET
+
+/api/v1/entities/{id}/matches
+
+Match suggestions
+
+POST
+
+/api/v1/entity-matches/{id}/decision
+
+Confirm/reject
+
+GET
+
+/api/v1/cases/{id}/graph
+
+Root/graph data
+
+POST
+
+/api/v1/graph/expand
+
+Expand node
+
+GET
+
+/api/v1/cases/{id}/timeline
+
+Timeline data
+
+GET
+
+/api/v1/cases/{id}/patterns
+
+Investigative leads
+
+GET
+
+/api/v1/cases/{id}/analytics
+
+Network analytics
+
+GET
+
+/api/v1/audit
+
+Audit records
+
+9. Performance and Reliability
+
+Never load the complete graph by default; support one-hop/controlled expansion.
+
+Use indexes/constraints for normalized identifiers and stable IDs.
+
+Run OCR, extraction and analytics as background jobs.
+
+Make jobs idempotent.
+
+Retry failed jobs without duplicating graph facts.
+
+Return source/evidence references with extracted facts.
+
+Keep raw documents immutable.
+
+10. Module 1 Done Criteria
+
+A sample FIR can be uploaded and processed.
+
+Extracted entities/events are reviewable.
+
+Approved entities are stored in PostgreSQL and Neo4j.
+
+Two cases sharing an identifier become connected.
+
+Graph expansion API returns bounded neighborhoods.
+
+Timeline, pattern and analytics APIs work on synthetic data.
+
+All important facts expose provenance.
+
+Audit logs capture uploads, reviews and match decisions.

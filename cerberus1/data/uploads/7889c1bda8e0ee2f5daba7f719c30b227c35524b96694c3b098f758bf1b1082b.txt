@@ -1,0 +1,17 @@
+
+FIRST INFORMATION REPORT (FIR No: 001/2026)
+Police Station: Cyber Crime Police Station Kochi
+Date & Time of Occurrence: 15-02-2026 11:30 hrs
+Complainant: Priya Sharma, residing at Marine Drive, Kochi.
+
+Details of Incident:
+The complainant reported being cheated of Rs. 2,50,000 via a fraudulent investment scheme operated on Telegram.
+Accused: Rahul Kumar, operating under alias RK Trader.
+Contact Number: 9876543210
+Vehicle Observed: White Hyundai Creta, Registration No: KL-07-AB-1234
+Organization: ABC Trading Pvt Ltd
+Bank Account: 123456789012 (IFSC: SBIN0001234, State Bank of India)
+UPI ID: rahul@oksbi
+Location of Operation: Panampilly Nagar, Kochi, Kerala.
+
+Investigation officer notes: Suspect communicated through phone 9876543210 requesting emergency RTGS and UPI payments.
